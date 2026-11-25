@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111111">
+  <title>¿Qué cocinamos hoy? | Asistente de cocina</title>
+  <style>
+    :root { color-scheme: dark; --bg:#101012; --surface:#1b1b1f; --surface2:#25252a; --text:#f7f5f2; --muted:#b9b7b5; --orange:#ff7900; --orange2:#ffa451; --border:#3c3b3e; --green:#a2e0af; --red:#ffabab; }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5} button,textarea,input,select{font:inherit} button{cursor:pointer} button:focus-visible,textarea:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--orange2);outline-offset:3px} a{color:var(--orange2)}
+    .wrap{max-width:1000px;margin:0 auto;padding:0 22px} header{border-bottom:1px solid var(--border);background:#151517} .top{display:flex;justify-content:space-between;align-items:center;padding-top:17px;padding-bottom:17px;gap:15px}.brand{font-size:1.05rem;font-weight:850;letter-spacing:-.4px}.brand b{color:var(--orange)}.tag{font-size:.78rem;color:var(--muted)}
+    main{padding-top:55px;padding-bottom:70px}.eyebrow{color:var(--orange2);font-size:.8rem;font-weight:800;letter-spacing:2px;text-transform:uppercase}h1{font-size:clamp(2.3rem,6.3vw,4.6rem);line-height:1.04;letter-spacing:-2px;margin:15px 0 18px;max-width:780px}h1 span{color:var(--orange)} .intro{color:var(--muted);max-width:670px;font-size:1.08rem;margin:0 0 34px}
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:24px}.panel h2{font-size:1.25rem;letter-spacing:-.3px;margin:0 0 8px}.help{color:var(--muted);margin:0 0 17px;font-size:.96rem}label{display:block;font-weight:750;margin:0 0 10px}textarea{width:100%;min-height:135px;resize:vertical;background:var(--surface2);color:var(--text);padding:16px;border:1px solid #626066;border-radius:12px;line-height:1.6}textarea::placeholder,input::placeholder{color:#bbb9b7}input[type="text"]{width:100%;background:var(--surface2);color:var(--text);padding:13px 15px;border:1px solid #626066;border-radius:11px}.save-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:end}.save-grid .btn{white-space:nowrap}.record-list{display:grid;gap:11px;margin-top:18px}.record{border:1px solid var(--border);background:#222226;padding:15px;border-radius:12px;display:flex;justify-content:space-between;gap:13px;align-items:center}.record-info{min-width:0}.record-title{font-weight:750;overflow-wrap:anywhere}.record-subtitle{font-size:.82rem;color:var(--muted);margin-top:4px;overflow-wrap:anywhere}.record-actions{display:flex;flex-wrap:wrap;gap:8px}.record-actions .btn{padding:9px 12px;min-height:40px}.empty-state{color:var(--muted);font-size:.93rem}.storage-note{font-size:.84rem;color:var(--muted);margin-top:13px}.danger{border-color:#a55e5e;color:#ffb0b0;background:#382424}.editing-label{color:var(--orange2);font-size:.88rem;margin:10px 0 0}.hidden{display:none!important}.small-note{font-size:.83rem;color:var(--muted);margin:9px 0 0}.pill-row{display:flex;flex-wrap:wrap;gap:9px;margin:20px 0 0}.pill{border:1px solid #5b514a;border-radius:100px;background:#29231f;color:#f6dac7;padding:6px 12px;font-size:.83rem}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.btn{border-radius:11px;border:1px solid var(--border);padding:13px 18px;font-weight:750;min-height:48px;transition:filter .2s,transform .15s}.btn:hover{filter:brightness(1.12)}.btn:active{transform:translateY(1px)}.primary{color:#14100d;background:var(--orange);border-color:var(--orange)}.secondary{background:var(--surface2);color:var(--text)}.outline{background:transparent;color:var(--orange2);border-color:var(--orange)}.btn[disabled]{cursor:not-allowed;opacity:.45}.error{color:var(--red);font-size:.91rem;min-height:1.4em;margin-top:9px}.success{color:var(--green)}.status{font-size:.91rem;margin:14px 0 0;min-height:1.4em}
+    .columns{display:grid;grid-template-columns:1fr 1fr;gap:20px}.feature{border:1px solid var(--border);padding:21px;background:#19191c;border-radius:15px}.feature h3{font-size:1rem;margin:0 0 8px}.feature p{font-size:.92rem;color:var(--muted);margin:0}.steps{counter-reset:steps;display:grid;gap:11px;margin:22px 0 0;padding:0;list-style:none}.steps li{counter-increment:steps;display:flex;gap:11px;align-items:flex-start;color:var(--muted)}.steps li:before{content:counter(steps);flex:0 0 25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#4a2a13;color:#ffbb87;font-size:.82rem;font-weight:800}
+    .preview{display:none}.preview.visible{display:block}.preview textarea{min-height:340px;font-size:.9rem;white-space:pre-wrap}.info{border-left:3px solid var(--orange);padding:12px 15px;background:#261e19;border-radius:0 9px 9px 0;color:#e8d9ce;font-size:.89rem;margin-top:20px}footer{border-top:1px solid var(--border);color:var(--muted);font-size:.8rem;padding:20px 0 28px} .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    @media(max-width:700px){.save-grid{grid-template-columns:1fr}.record{align-items:stretch;flex-direction:column}.record-actions .btn{width:auto;flex:1}main{padding-top:38px}.panel{padding:19px;border-radius:16px}.columns{grid-template-columns:1fr}.actions{flex-direction:column}.btn{width:100%}.tag{display:none}h1{letter-spacing:-1px}.preview textarea{min-height:380px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+    /* v4: optional smart filters, no external services */
+    .filters-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:22px 0 12px}
+    .filters-head h3{margin:0;font-size:1.04rem}.filters-head span{font-size:.8rem;color:var(--muted)}
+    .filter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .filter-grid label{font-size:.9rem;margin-bottom:7px}
+    .filter-grid select{appearance:auto;width:100%;min-height:48px;padding:10px 11px;background:var(--surface2);border:1px solid #777076;border-radius:11px;color:var(--text)}
+    .filter-grid select:focus{border-color:var(--orange)}
+    .filter-note{font-size:.82rem;color:var(--muted);margin:11px 0 0}
+    @media(max-width:700px){.filter-grid{grid-template-columns:1fr}.filters-head{align-items:start;flex-direction:column;gap:2px}}
+    /* v3: UX polish, maintaining all existing business rules and storage key */
+    :root { --bg:#111113; --surface:#1e1e21; --surface2:#29292d; --border:#454247; --muted:#cac5c1; }
+    .wrap{max-width:960px}main{padding-top:42px}header{position:relative}h1{font-size:clamp(2.2rem,5.5vw,3.6rem);letter-spacing:-1.7px;max-width:770px;margin:12px 0 14px}.intro{margin-bottom:24px;font-size:1rem}
+    .workflow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 25px;padding:0;list-style:none}.workflow li{border:1px solid var(--border);background:#19191c;padding:12px 13px;border-radius:12px;color:var(--muted);font-size:.88rem;display:flex;align-items:center;gap:10px}.workflow strong{display:grid;place-items:center;background:#4c2c17;border:1px solid #87502a;color:#ffb16f;width:28px;height:28px;flex:0 0 28px;border-radius:50%}
+    .panel{padding:25px;margin-bottom:16px;border-radius:17px}.panel-main{border-color:#8b532f;box-shadow:0 0 0 1px #3d271b}.section-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}.section-heading h2{margin:0}.step-label{font-size:.75rem;font-weight:800;letter-spacing:.8px;color:#ffad67;background:#3d281b;border:1px solid #805032;padding:5px 9px;border-radius:20px;white-space:nowrap}.help{font-size:.92rem;margin-bottom:18px}.field-meta{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px}.field-meta label{margin-bottom:0}.field-meta .microcopy{font-size:.8rem;color:var(--muted)}textarea{min-height:145px;border-color:#777076;background:#242427}textarea:focus,input:focus{border-color:var(--orange)}.small-note{margin-top:10px;font-size:.82rem}.pill-row{margin-top:16px}.pill{padding:5px 10px;font-size:.78rem}.actions{margin-top:18px}.btn{transition:filter .15s,transform .15s,box-shadow .15s}.btn.primary:hover{box-shadow:0 4px 18px #ff790025}.primary{background:#ff850b}.btn.outline{border-color:#b66b32}.error:empty,.status:empty{display:none}.error:not(:empty),.status:not(:empty){border-radius:10px;padding:11px 13px;margin-top:13px;background:#282528}.error:not(:empty){background:#382327}.success:not(:empty){background:#1d3225}.result-top{background:#2e231b;border:1px solid #765037;border-radius:11px;padding:10px 12px;color:#f7d4b5;font-size:.9rem;margin:0 0 17px}.preview textarea{min-height:250px}.preview .info{margin-top:16px}.record{background:#26262a}.record-title{font-size:.98rem}.record-subtitle{line-height:1.5}.record-actions .btn{font-size:.87rem}.record-actions .danger{background:transparent}.record-actions .danger:hover{background:#382424}.empty-state{border:1px dashed #64554d;padding:20px;border-radius:12px;background:#25211f}.storage-note{border-top:1px solid var(--border);padding-top:13px;line-height:1.55}.save-tip{background:#252328;border-radius:10px;padding:11px 13px;margin-bottom:15px;color:#d3cfcc;font-size:.86rem}.editing-label:not(.hidden){background:#392817;border:1px solid #825333;border-radius:9px;padding:10px 12px;margin-top:14px}.columns{margin-top:16px}.steps{margin-top:20px}.tag{display:block}
+    @media(max-width:700px){main{padding-top:28px}.workflow{grid-template-columns:1fr;gap:7px}.workflow li{padding:9px 11px}.panel{padding:19px}.step-label{font-size:.69rem}.section-heading{align-items:flex-start}.field-meta{align-items:flex-start}.field-meta .microcopy{text-align:right}.tag{display:none}.record-actions .btn{min-width:90px}.actions .btn{width:100%}}
+    @media(min-width:701px){.main-actions .primary{min-width:245px}.result-actions .primary{min-width:205px}}
+  </style>
+</head>
+<body>
+<header><div class="wrap top"><div class="brand">¿Qué cocinamos <b>hoy?</b></div><div class="tag">Tu asistente de cocina · 2 adultos</div></div></header>
+<main class="wrap">
+  <div class="eyebrow">Cocina simple · Menos decisiones</div>
+  <h1>Vos ponés los ingredientes.<br><span>ChatGPT propone las recetas.</span></h1>
+  <p class="intro">Contá qué tenés en casa y prepará en segundos un pedido personalizado para descubrir qué cocinar hoy. Sin cuentas nuevas, sin API y con listas guardadas solo en este navegador.</p>
+  <ol class="workflow" aria-label="Cómo usar la aplicación"><li><strong>1</strong> Escribí lo que tenés</li><li><strong>2</strong> Prepará el pedido</li><li><strong>3</strong> Copialo y abrí ChatGPT</li></ol>
+  <section class="panel panel-main" aria-labelledby="titulo-ingredientes">
+    <div class="section-heading"><h2 id="titulo-ingredientes">¿Qué ingredientes tenés?</h2><span class="step-label">PASO 1</span></div>
+    <p class="help">Escribí libremente los ingredientes. Podés agregar cantidades si las sabés; no hace falta que sea una lista perfecta.</p>
+    <div class="field-meta"><label for="ingredientes">Tus ingredientes</label><span class="microcopy" id="contador-ingredientes">0 / 2500 caracteres</span></div>
+    <textarea id="ingredientes" maxlength="2500" spellcheck="true" placeholder="Por ejemplo: Tengo 2 pechugas de pollo, arroz, una cebolla, 2 zanahorias, un zucchini y un poco de queso."></textarea>
+    <p class="small-note">Suponemos que tenés sal, pimienta, aceite de cocina, vinagre y condimentos habituales. El resto se considera disponible solo si lo escribís.</p>
+    <div class="filters-head"><h3>Personalizá las propuestas</h3><span>Filtros opcionales</span></div>
+    <div class="filter-grid">
+      <div><label for="tiempo">Tiempo disponible</label><select id="tiempo"><option value="">Sin límite específico</option><option value="15">Hasta 15 minutos</option><option value="30">Hasta 30 minutos</option><option value="60">Hasta 60 minutos</option></select></div>
+      <div><label for="comida">Tipo de comida</label><select id="comida"><option value="">Cualquiera</option><option value="almuerzo">Almuerzo</option><option value="cena">Cena</option></select></div>
+      <div><label for="estilo">Estilo de plato</label><select id="estilo"><option value="">Sin preferencia</option><option value="liviano">Liviano</option><option value="contundente">Contundente</option></select></div>
+    </div>
+    <p class="filter-note">Si no elegís filtros, las recomendaciones siguen como antes. Las restricciones y preferencias del hogar siempre se respetan.</p>
+    <div class="pill-row" aria-label="Preferencias aplicadas"><span class="pill">2 adultos</span><span class="pill">Rico en proteínas</span><span class="pill">Sin carne vacuna</span><span class="pill">Sin banana</span><span class="pill">Sin huevo protagonista</span></div>
+    <div class="actions main-actions"><button class="btn primary" id="generar" type="button">Preparar pedido para ChatGPT →</button><button class="btn secondary" id="limpiar" type="button">Limpiar campo</button></div>
+    <p id="error" class="error" role="alert" aria-live="polite"></p>
+  </section>
+  <section id="resultado" class="panel preview" aria-labelledby="titulo-resultado">
+    <div class="section-heading"><h2 id="titulo-resultado">Tu pedido está listo</h2><span class="step-label">PASOS 2 Y 3</span></div>
+    <p class="help">Ya incorporamos los ingredientes, las preferencias del hogar y las cantidades para dos adultos.</p><div class="result-top">Siguiente paso: copiá el texto y pegalo en ChatGPT para recibir las recetas.</div>
+    <label for="pedido">Solicitud para ChatGPT</label>
+    <textarea id="pedido" spellcheck="true" aria-label="Solicitud editable para ChatGPT"></textarea>
+    <div class="actions result-actions"><button id="copiar" class="btn primary" type="button">1. Copiar pedido</button><button id="abrir" class="btn outline" type="button">2. Abrir ChatGPT ↗</button></div>
+    <p class="status" id="estado" role="status" aria-live="polite"></p>
+    <div class="info"><strong>Cómo funciona:</strong> copiá el pedido, abrí ChatGPT y pegalo en una conversación. La página no envía datos automáticamente ni genera las recetas por sí misma. Si el botón de copia no funciona en tu navegador, seleccioná el texto y copialo manualmente.</div>
+  </section>
+  <section class="panel" aria-labelledby="titulo-guardados">
+    <div class="section-heading"><h2 id="titulo-guardados">Mis listas guardadas <span id="contador-listas" class="microcopy"></span></h2><span class="step-label">OPCIONAL</span></div>
+    <p class="help">¿Usás ingredientes parecidos otro día? Guardá la lista y recuperala cuando quieras.</p><div class="save-tip">Guardar es opcional: podés preparar pedidos sin guardar nada.</div>
+    <div class="save-grid">
+      <div><label for="nombre-lista">Nombre de la lista</label><input id="nombre-lista" type="text" maxlength="70" placeholder="Ej.: Cena del jueves" autocomplete="off"></div>
+      <button class="btn primary" id="guardar" type="button">Guardar lista</button>
+    </div>
+    <p id="edicion" class="editing-label hidden"></p>
+    <div class="actions"><button class="btn secondary hidden" id="nueva-lista" type="button">Crear lista nueva</button></div>
+    <p id="mensaje-guardado" class="status" role="status" aria-live="polite"></p>
+    <div id="lista-guardados" class="record-list" aria-label="Listas de ingredientes guardadas"></div>
+    <p class="storage-note">Se guardan en localStorage de este navegador: nombre, ingredientes, filtros seleccionados, fecha de modificación y, si existe, el texto del pedido para ChatGPT. No se sincronizan con otros dispositivos. Borrar los datos del sitio o usar navegación privada puede hacer que se pierdan.</p>
+  </section>
+  <div class="columns">
+    <section class="feature"><h3>¿Qué recetas vas a recibir?</h3><p>Opciones que podés preparar con lo que tenés y otras a las que les faltan, como máximo, uno o dos ingredientes no básicos. Cada propuesta pide cantidades para dos, pasos, tiempo e ingredientes faltantes.</p></section>
+    <section class="feature"><h3>Adaptado a tu hogar</h3><p>Preferencia por comidas variadas, saludables, ricas en proteínas y de estilo mediterráneo. Sin carne vacuna, banana ni platos cuyo ingrediente principal sea el huevo.</p></section>
+  </div>
+  <ol class="steps" aria-label="Pasos de uso"><li>Escribí tus ingredientes o recuperá una lista guardada.</li><li>Generá el pedido y copialo con un botón.</li><li>Abrí ChatGPT, pegalo y recibí tus propuestas de comida.</li></ol>
+</main>
+<footer><div class="wrap footer-inner"><span>¿Qué cocinamos hoy? · Versión 4.0</span><span>Funciona localmente en tu navegador · Guardado local opcional</span></div></footer>
+<script>
+'use strict';
+const ingredientesEl = document.getElementById('ingredientes');
+const tiempoEl = document.getElementById('tiempo');
+const comidaEl = document.getElementById('comida');
+const estiloEl = document.getElementById('estilo');
+const pedidoEl = document.getElementById('pedido');
+const errorEl = document.getElementById('error');
+const estadoEl = document.getElementById('estado');
+const resultadoEl = document.getElementById('resultado');
+const generarBtn = document.getElementById('generar');
+const limpiarBtn = document.getElementById('limpiar');
+const copiarBtn = document.getElementById('copiar');
+const abrirBtn = document.getElementById('abrir');
+const nombreEl = document.getElementById('nombre-lista');
+const guardarBtn = document.getElementById('guardar');
+const nuevaListaBtn = document.getElementById('nueva-lista');
+const edicionEl = document.getElementById('edicion');
+const mensajeGuardadoEl = document.getElementById('mensaje-guardado');
+const listaGuardadosEl = document.getElementById('lista-guardados');
+const contadorIngredientesEl = document.getElementById('contador-ingredientes');
+const contadorListasEl = document.getElementById('contador-listas');
+function actualizarContadorIngredientes() { contadorIngredientesEl.textContent = ingredientesEl.value.length + ' / 2500 caracteres'; }
+const STORAGE_KEY = 'que-cocinamos-hoy-listas-v2';
+const MAX_LISTAS = 50;
+let idActivo = null;
+let listas = [];
+let almacenamientoDisponible = true;
+
+function leerListas() {
+  try {
+    const valor = localStorage.getItem(STORAGE_KEY);
+    if (!valor) return [];
+    const datos = JSON.parse(valor);
+    if (!Array.isArray(datos)) throw new Error('Formato de datos inválido');
+    return datos.filter(item => item && typeof item.id === 'string' && typeof item.nombre === 'string' && typeof item.ingredientes === 'string' && typeof item.pedido === 'string' && typeof item.modificado === 'string').slice(0, MAX_LISTAS);
+  } catch (error) {
+    almacenamientoDisponible = false;
+    mostrarMensajeGuardado('No se pudieron leer las listas guardadas. El almacenamiento puede estar bloqueado o los datos pueden estar dañados. No se sobrescribirán.', true);
+    return [];
+  }
+}
+function persistirListas(nuevas) {
+  if (!almacenamientoDisponible) throw new Error('El almacenamiento local no está disponible en este navegador.');
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(nuevas)); }
+  catch (error) { throw new Error('No se pudieron guardar los datos. Revisá el espacio disponible y los permisos de almacenamiento del navegador.'); }
+}
+function mostrarMensajeGuardado(texto, esError = false) {
+  mensajeGuardadoEl.textContent = texto;
+  mensajeGuardadoEl.className = esError ? 'status error' : 'status success';
+}
+function refrescarEdicion() {
+  const actual = listas.find(x => x.id === idActivo);
+  edicionEl.classList.toggle('hidden', !actual);
+  nuevaListaBtn.classList.toggle('hidden', !actual);
+  edicionEl.textContent = actual ? 'Editando la lista guardada: ' + actual.nombre : '';
+  guardarBtn.textContent = actual ? 'Guardar cambios' : 'Guardar lista';
+}
+function renderizarListas() {
+  contadorListasEl.textContent = '(' + listas.length + ')';
+  listaGuardadosEl.replaceChildren();
+  if (listas.length === 0) {
+    const vacio = document.createElement('p'); vacio.className = 'empty-state';
+    vacio.textContent = 'Todavía no hay listas guardadas.';
+    listaGuardadosEl.append(vacio); return;
+  }
+  const ordenadas = [...listas].sort((a,b) => b.modificado.localeCompare(a.modificado));
+  for (const item of ordenadas) {
+    const fila = document.createElement('div'); fila.className = 'record';
+    const detalle = document.createElement('div'); detalle.className = 'record-info';
+    const titulo = document.createElement('div'); titulo.className = 'record-title'; titulo.textContent = item.nombre;
+    const sub = document.createElement('div'); sub.className = 'record-subtitle';
+    const fecha = new Date(item.modificado);
+    sub.textContent = (Number.isFinite(fecha.getTime()) ? 'Actualizada: ' + fecha.toLocaleString('es-AR') + ' · ' : '') + item.ingredientes.slice(0, 110);
+    detalle.append(titulo, sub);
+    const acciones = document.createElement('div'); acciones.className = 'record-actions';
+    const cargar = document.createElement('button'); cargar.type = 'button'; cargar.className = 'btn secondary'; cargar.textContent = 'Cargar / editar';
+    cargar.addEventListener('click', () => cargarLista(item.id));
+    const eliminar = document.createElement('button'); eliminar.type = 'button'; eliminar.className = 'btn danger'; eliminar.textContent = 'Eliminar';
+    eliminar.setAttribute('aria-label', 'Eliminar lista ' + item.nombre);
+    eliminar.addEventListener('click', () => eliminarLista(item.id));
+    acciones.append(cargar, eliminar); fila.append(detalle, acciones); listaGuardadosEl.append(fila);
+  }
+}
+function cargarLista(id) {
+  const actual = listas.find(x => x.id === id);
+  if (!actual) { mostrarMensajeGuardado('La lista ya no existe.', true); return; }
+  idActivo = actual.id;
+  nombreEl.value = actual.nombre;
+  ingredientesEl.value = actual.ingredientes;
+  tiempoEl.value = ['15','30','60'].includes(actual.tiempo) ? actual.tiempo : '';
+  comidaEl.value = ['almuerzo','cena'].includes(actual.comida) ? actual.comida : '';
+  estiloEl.value = ['liviano','contundente'].includes(actual.estilo) ? actual.estilo : '';
+  actualizarContadorIngredientes();
+  pedidoEl.value = actual.pedido;
+  resultadoEl.classList.toggle('visible', Boolean(actual.pedido.trim()));
+  errorEl.textContent = '';
+  estadoEl.textContent = '';
+  mostrarMensajeGuardado('Lista cargada. Podés modificarla y usar «Guardar cambios».');
+  refrescarEdicion();
+  ingredientesEl.focus();
+  ingredientesEl.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function eliminarLista(id) {
+  const actual = listas.find(x => x.id === id);
+  if (!actual) return;
+  if (!window.confirm('¿Eliminar definitivamente la lista «' + actual.nombre + '» de este navegador?')) return;
+  const nuevas = listas.filter(x => x.id !== id);
+  try { persistirListas(nuevas); } catch (error) { mostrarMensajeGuardado(error.message, true); return; }
+  listas = nuevas;
+  if (idActivo === id) { idActivo = null; refrescarEdicion(); }
+  renderizarListas();
+  mostrarMensajeGuardado('Lista eliminada del almacenamiento local. Los campos que ves en pantalla se conservan.');
+}
+function guardarLista() {
+  const nombre = nombreEl.value.trim();
+  const ingredientes = ingredientesEl.value.trim();
+  if (!nombre) { mostrarMensajeGuardado('Ingresá un nombre para identificar la lista.', true); nombreEl.focus(); return; }
+  try { crearSolicitud(ingredientes); }
+  catch (error) { mostrarMensajeGuardado(error.message, true); ingredientesEl.focus(); return; }
+  const existente = listas.find(x => x.id === idActivo);
+  if (!existente && listas.length >= MAX_LISTAS) { mostrarMensajeGuardado('Alcanzaste el límite de 50 listas. Eliminá alguna antes de guardar una nueva.', true); return; }
+  const id = existente ? existente.id : (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : String(Date.now()) + '-' + Math.random().toString(36).slice(2));
+  const nueva = {id, nombre, ingredientes, pedido: pedidoEl.value, tiempo: tiempoEl.value, comida: comidaEl.value, estilo: estiloEl.value, modificado: new Date().toISOString()};
+  const nuevas = existente ? listas.map(x => x.id === id ? nueva : x) : [...listas, nueva];
+  try { persistirListas(nuevas); } catch (error) { mostrarMensajeGuardado(error.message, true); return; }
+  listas = nuevas; idActivo = id;
+  refrescarEdicion(); renderizarListas();
+  mostrarMensajeGuardado(existente ? 'Cambios guardados en este navegador.' : 'Lista guardada en este navegador.');
+}
+function nuevaLista() {
+  idActivo = null;
+  nombreEl.value = '';
+  ingredientesEl.value = '';
+  tiempoEl.value = ''; comidaEl.value = ''; estiloEl.value = '';
+  actualizarContadorIngredientes();
+  pedidoEl.value = '';
+  resultadoEl.classList.remove('visible');
+  errorEl.textContent = ''; estadoEl.textContent = '';
+  mostrarMensajeGuardado('Podés crear otra lista. Las listas ya guardadas no se modificaron.');
+  refrescarEdicion(); ingredientesEl.focus();
+}
+function invalidarPedido() {
+  pedidoEl.value = '';
+  resultadoEl.classList.remove('visible');
+  estadoEl.textContent = '';
+}
+for (const filtro of [tiempoEl, comidaEl, estiloEl]) filtro.addEventListener('change', invalidarPedido);
+ingredientesEl.addEventListener('input', () => {
+  actualizarContadorIngredientes();
+  // Evita conservar un pedido desactualizado cuando cambian los ingredientes.
+  invalidarPedido();
+});
+guardarBtn.addEventListener('click', guardarLista);
+nuevaListaBtn.addEventListener('click', nuevaLista);
+listas = leerListas();
+renderizarListas();
+refrescarEdicion();
+actualizarContadorIngredientes();
+
+function crearSolicitud(ingredientes, filtros = {}) {
+  const lista = ingredientes.trim();
+  if (lista.length < 3) throw new Error('Escribí al menos un ingrediente para continuar.');
+  if (!/[\p{L}]/u.test(lista)) throw new Error('Incluí el nombre de al menos un ingrediente, no solamente números o símbolos.');
+  const limites = {'15':'15','30':'30','60':'60'};
+  const tipos = {almuerzo:'almuerzo',cena:'cena'};
+  const estilos = {liviano:'liviano',contundente:'contundente'};
+  const instrucciones = [];
+  if (Object.prototype.hasOwnProperty.call(limites, filtros.tiempo)) instrucciones.push('- Tiempo total por receta: máximo ' + limites[filtros.tiempo] + ' minutos, incluyendo preparación y cocción. Si ninguna opción cumple, explicalo y no propongas recetas que excedan el límite.');
+  if (Object.prototype.hasOwnProperty.call(tipos, filtros.comida)) instrucciones.push('- Tipo de comida: priorizá recetas adecuadas para ' + tipos[filtros.comida] + '.');
+  if (Object.prototype.hasOwnProperty.call(estilos, filtros.estilo)) instrucciones.push('- Estilo de plato: preferí opciones ' + (filtros.estilo === 'liviano' ? 'livianas, sin perder un buen aporte de proteínas' : 'contundentes y saciantes, manteniendo las preferencias saludables del hogar') + '.');
+  const bloqueFiltros = instrucciones.length ? '\n\nFILTROS ADICIONALES DE ESTA CONSULTA:\n' + instrucciones.join('\n') : '';
+  return `Actuá como asistente de cocina familiar. Necesito ideas concretas para cocinar hoy para DOS ADULTOS.\n\nINGREDIENTES QUE TENGO (texto libre):\n${lista}\n\nINGREDIENTES BÁSICOS QUE PODÉS CONSIDERAR DISPONIBLES:\nSal, pimienta, aceite de cocina, vinagre y condimentos habituales. No supongas que tengo otros ingredientes (por ejemplo: huevos, leche, harina, ajo, cebolla o manteca) a menos que los haya mencionado arriba. Si una cantidad no fue indicada, no des por hecho que tengo suficiente: señalá qué cantidad necesita la receta y que debo verificarla.\n\nPREFERENCIAS DEL HOGAR:\n- Comemos dos adultos.\n- Priorizá recetas variadas, saludables, ricas en proteínas y, cuando encaje, de estilo mediterráneo.\n- Evitá carne vacuna y banana.\n- No propongas platos donde el huevo sea el ingrediente principal o visible protagonista (sí puede estar incorporado discretamente, si está disponible).\n- No incluyas recomendaciones alimentarias para niños.\n\n${bloqueFiltros}\n\nQUÉ QUIERO RECIBIR:\n1. Hasta 3 recetas que pueda preparar ahora mismo con los ingredientes mencionados y los básicos indicados.\n2. Hasta 3 recetas adicionales que requieran comprar como máximo 1 o 2 ingredientes no básicos. Indicá específicamente cuáles faltan y la cantidad para dos adultos.\n3. Para cada receta: nombre, tiempo total estimado, ingredientes con cantidades para dos adultos, instrucciones claras paso a paso y una breve explicación de por qué la recomendás.\n4. Separá claramente las categorías «Puedo cocinar ahora» y «Me faltan pocas cosas».\n5. Verificá que las recetas de «Puedo cocinar ahora» no incluyan ingredientes que no declaré, excepto los básicos autorizados. Si ninguna receta cumple, decilo sin inventar ingredientes disponibles.\n6. No afirmes que tengo cantidades suficientes cuando no las informé. Si corresponde, incluí una nota de verificación.\n7. Cerrá con una recomendación principal basada en simplicidad, uso de lo disponible y buen aporte proteico.\n\nRespondé en español de Argentina, con propuestas realistas y sin agregar ingredientes ficticiamente disponibles.`;
+}
+
+generarBtn.addEventListener('click', () => {
+  errorEl.textContent = '';
+  estadoEl.textContent = '';
+  try {
+    pedidoEl.value = crearSolicitud(ingredientesEl.value, {tiempo:tiempoEl.value, comida:comidaEl.value, estilo:estiloEl.value});
+    resultadoEl.classList.add('visible');
+    if (idActivo) mostrarMensajeGuardado('Generaste un nuevo pedido. Usá «Guardar cambios» para conservarlo en la lista guardada.');
+    resultadoEl.scrollIntoView({behavior:'smooth',block:'start'});
+  } catch (error) {
+    resultadoEl.classList.remove('visible');
+    errorEl.textContent = error.message;
+    ingredientesEl.focus();
+  }
+});
+limpiarBtn.addEventListener('click', () => {
+  ingredientesEl.value = '';
+  tiempoEl.value = ''; comidaEl.value = ''; estiloEl.value = '';
+  actualizarContadorIngredientes();
+  pedidoEl.value = '';
+  errorEl.textContent = '';
+  estadoEl.textContent = '';
+  resultadoEl.classList.remove('visible');
+  ingredientesEl.focus();
+  if (idActivo) mostrarMensajeGuardado('Se borraron los campos en pantalla. La lista guardada sigue intacta hasta que presiones «Guardar cambios».');
+});
+async function copiarTexto(texto) {
+  if (navigator.clipboard && window.isSecureContext) {
+    await navigator.clipboard.writeText(texto);
+    return true;
+  }
+  // file:// suele no permitir la API Clipboard. Intentamos el método compatible.
+  pedidoEl.focus();
+  pedidoEl.select();
+  try { return document.execCommand('copy'); } catch (_) { return false; }
+}
+copiarBtn.addEventListener('click', async () => {
+  const texto = pedidoEl.value.trim();
+  if (!texto) { estadoEl.textContent = 'No hay un pedido para copiar. Escribí ingredientes y generá una solicitud.'; estadoEl.className = 'status error'; return; }
+  let copiado = false;
+  try { copiado = await copiarTexto(texto); } catch (_) { copiado = false; }
+  if (copiado) {
+    estadoEl.textContent = 'Solicitud copiada. Ahora abrí ChatGPT y pegala en un chat.';
+    estadoEl.className = 'status success';
+  } else {
+    pedidoEl.focus(); pedidoEl.select();
+    estadoEl.textContent = 'Tu navegador bloqueó la copia automática. El texto quedó seleccionado: presioná Ctrl+C (o Copiar en el celular).';
+    estadoEl.className = 'status error';
+  }
+});
+abrirBtn.addEventListener('click', () => {
+  // Acción explícita: no envía automáticamente información personal a ningún sitio.
+  const nueva = window.open('https://chatgpt.com/', '_blank', 'noopener,noreferrer');
+  if (!nueva) {
+    estadoEl.innerHTML = 'Si no se abrió una pestaña, visitá <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPT</a>.';
+    estadoEl.className = 'status';
+  }
+});
+</script>
+</body>
+</html>
